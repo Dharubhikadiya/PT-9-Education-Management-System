@@ -12,12 +12,19 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     setUserRole(role);
-    if (role === 'admin') {
-      navigate('/admin');
-    } else if (role === 'teacher') {
-      navigate('/teacher');
-    } else {
-      navigate('/student');
+    
+    switch(role) {
+      case 'admin':
+        navigate('/admin');
+        break;
+      case 'teacher':
+        navigate('/teacher');
+        break;
+      case 'student':
+        navigate('/student');
+        break;
+      default:
+        console.error('Invalid role selected');
     }
   };
 

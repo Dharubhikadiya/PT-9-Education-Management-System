@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import CoursesTable from './CourseTable';
 import { useAppContext } from '../context/AppContext';
-
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 function CourseManagement() {
-    const { courses, addCourse, updateCourse, deleteCourse } = useAppContext();
-    const [editingCourse, setEditingCourse] = useState(null);
+  const { courses, addCourse, updateCourse, deleteCourse } = useAppContext();
+  const [editingCourse, setEditingCourse] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    startDate: '',
-    endDate: '',
-    teacher: ''
+    teacher: '',
   });
 
   const handleInputChange = (e) => {
@@ -27,7 +24,7 @@ function CourseManagement() {
     } else {
       addCourse(formData);
     }
-    setFormData({ title: '', description: '', startDate: '', endDate: '', teacher: '' });
+    setFormData({ title: '', description: '', teacher: '' });
   };
 
   const handleEdit = (course) => {
@@ -36,26 +33,23 @@ function CourseManagement() {
   };
 
   const handleDelete = (id) => {
-    deleteCourse(id);
+    if (window.confirm("Are you sure you want to delete this course?")) {
+      deleteCourse(id);
+    }
   };
 
-
- 
-
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Course Management</h2>
+    <div className="p-6 bg-[#e9efec] min-h-screen">
+      <h2 className="text-2xl font-semibold text-[#16423c] mb-6">Course Management</h2>
       
-      {/* Course Creation/Editing Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
         <input
           type="text"
           name="title"
           value={formData.title}
           onChange={handleInputChange}
           placeholder="Course Title"
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6a9c89]"
           required
         />
         <textarea
@@ -63,23 +57,7 @@ function CourseManagement() {
           value={formData.description}
           onChange={handleInputChange}
           placeholder="Course Description"
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="date"
-          name="startDate"
-          value={formData.startDate}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="date"
-          name="endDate"
-          value={formData.endDate}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6a9c89]"
           required
         />
         <input
@@ -87,21 +65,40 @@ function CourseManagement() {
           name="teacher"
           value={formData.teacher}
           onChange={handleInputChange}
-          placeholder="Assigned Teacher"
-          className="w-full p-2 border rounded"
+          placeholder="Teacher Name"
+          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6a9c89]"
           required
         />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-        {editingCourse ? 'Update Course' : 'Create Course'}
-      </button>
+        <button type="submit" className="w-full bg-[#16423c] text-white p-3 rounded hover:bg-[#6a9c89] transition duration-200">
+          {editingCourse ? 'Update Course' : 'Add Course'}
+        </button>
       </form>
 
-      {/* Courses Table */}
-      <CoursesTable
-        courses={courses}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <div className="mt-6 space-y-4">
+        {courses.map(course => (
+          <div key={course.id} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-semibold text-[#16423c]">{course.title}</h3>
+              <p>Description: {course.description}</p>
+              <p>Teacher: {course.teacher}</p>
+            </div>
+            <div className="flex space-x-2">
+              <button 
+                onClick={() => handleEdit(course)}
+                className="text-[#6a9c89] hover:text-[#16423c]"
+              >
+                <FaEdit size={20} />
+              </button>
+              <button 
+                onClick={() => handleDelete(course.id)}
+                className="text-red-500 hover:text-red-600"
+              >
+                <FaTrash size={20} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

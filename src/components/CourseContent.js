@@ -36,7 +36,6 @@ function CourseContent({ courseId }) {
         </button>
       </form>
 
-      {/* Quiz Upload Form */}
       <form onSubmit={handleQuizUpload} className="space-y-4">
         <textarea
           value={quiz}
